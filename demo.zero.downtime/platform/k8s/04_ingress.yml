@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: zero-down-sb
+spec:
+  rules:
+  - host: sb.zero.down.com
+    http:
+      paths:
+      - backend:
+          serviceName: zero-down-sb
+          servicePort: http
+        path: /hello

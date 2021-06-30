@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zero-down-sb
+  labels:
+     app: zero-down-sb
+spec:
+  ports:
+  - nodePort: 32080
+    port: 8080
+    targetPort: http
+    name: http
+  selector:
+    app: zero-down-sb
+  type: NodePort

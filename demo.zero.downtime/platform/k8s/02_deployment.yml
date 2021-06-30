@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zero-down-sb
+  labels:
+    app: zero-down-sb
+    type: backend
+    version: v1
+spec:
+  replicas: 1
+  strategy: 
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: zero-down-sb
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: zero-down-sb
+        type: backend
+        version: v1
+    spec:  
+      containers:
+        - name: zero-down-sb
+          image: mkarakas/zero-down-sb:latest
+          env:
+           - name: JAVA_TOOL_OPTIONS
+             value: "-Xmx1024m"
+          readinessProbe: 
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            timeoutSeconds: 10
+            periodSeconds: 10
+            initialDelaySeconds: 10
+          livenessProbe: 
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            timeoutSeconds: 10
+            periodSeconds: 10
+            initialDelaySeconds: 10
+          lifecycle:
+            preStop:
+              exec:
+                 command: ["/bin/bash", "-c", "sleep 10"]  
+          imagePullPolicy: IfNotPresent
+          ports:
+          - name: http
+            containerPort: 8080    
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+            requests:
+              cpu: 300m
+              memory: 256Mi
+      restartPolicy: Always
