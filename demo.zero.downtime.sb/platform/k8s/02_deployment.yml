@@ -57,6 +57,6 @@ spec:
               cpu: 1000m
               memory: 1024Mi
             requests:
-              cpu: 300m
+              cpu: 500m
               memory: 256Mi
       restartPolicy: Always

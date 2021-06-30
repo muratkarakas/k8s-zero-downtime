@@ -9,7 +9,8 @@ public class HelloResource {
   @GetMapping("/hello")
   public String hello() {
     try {
-      Thread.sleep(5000);
+      long timeToWaitInMillis = (long)(Math.random() * 10000);
+      Thread.sleep(timeToWaitInMillis);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
